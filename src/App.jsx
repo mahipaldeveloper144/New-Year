@@ -10,7 +10,7 @@ const translations = {
     copyButton: "Copy Link",
     shareButton: "Share",
     footer: "Made with ❤️ by New Year Greetings Team",
-    greeting: "🎉 {name} wishes you a very Happy New Year! May this year bring you joy, success, and prosperity! 🎉",
+    greeting: "🎉 With wishes for happiness, wealth, simplicity, success, health, respect, peace and prosperity, {name} and their family extend heartfelt New Year greetings to you and your family! 🎉",
     selectLanguage: "Select Language",
     loading: "Generating your greeting...",
     success: "Link generated successfully!",
@@ -26,7 +26,7 @@ const translations = {
     copyButton: "लिंक कॉपी करें",
     shareButton: "शेयर करें",
     footer: "न्यू ईयर ग्रीटिंग्स टीम द्वारा ❤️ के साथ बनाया गया",
-    greeting: "🎉 {name} की तरफ़ से आपको नव वर्ष की हार्दिक शुभकामनाएँ! यह वर्ष आपके लिए खुशी, सफलता और समृद्धि लेकर आए! 🎉",
+    greeting: "🎉 सुख, संपत्ति, सादगी, सफलता, स्वास्थ्य, सम्मान शान्ति एवं समृध्दि मंगलकामनाओं के साथ {name} एवं उनके परिवार की तरफ से आपको और आपके परिवार को नये साल की हार्दिक शुभकामनाएं।। 🎉",
     selectLanguage: "भाषा चुनें",
     loading: "आपकी शुभकामना बनाई जा रही है...",
     success: "लिंक सफलतापूर्वक बनाया गया!",
@@ -36,13 +36,13 @@ const translations = {
     musicOff: "🔇"
   },
   gu: {
-    title: "✨ નવા વર્ષની શુભેચ્છાઓ ✨",
+    title: "✨ નુતન વર્ષાભિનંદન  ✨",
     placeholder: "તમારું નામ દાખલ કરો",
     button: "મોકલો / લિંક બનાવો",
     copyButton: "લિંક કોપી કરો",
     shareButton: "શેર કરો",
     footer: "ન્યૂ ઈયર ગ્રીટિંગ્સ ટીમ દ્વારા ❤️ સાથે બનાવ્યું",
-    greeting: "🎉 {name} તરફથી તમને નવા વર્ષ ની હાર્દિક શુભેચ્છાઓ! આ વર્ષ તમારા માટે આનંદ, સફળતા અને સમૃદ્ધિ લાવે! 🎉",
+    greeting: "🎉 સુખ, સંપત્તિ, સાદગી, સફળતા, સ્વાસ્થ્ય, સન્માન, શાંતિ અને સમૃદ્ધિની મંગલકામનાઓ સાથે {name} અને તેમના પરિવાર તરફથી તમને અને તમારા પરિવારને નવા વર્ષની હાર્દિક શુભેચ્છાઓ! 🎉",
     selectLanguage: "ભાષા પસંદ કરો",
     loading: "તમારી શુભેચ્છા બનાવી રહ્યા છીએ...",
     success: "લિંક સફળતાપૂર્વક બનાવ્યો!",
@@ -54,37 +54,22 @@ const translations = {
 };
 
 // Particle component
-const Particle = ({ delay = 0 }) => {
-  const [position, setPosition] = useState({
-    x: Math.random() * window.innerWidth,
-    y: window.innerHeight + 50
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPosition({
-        x: Math.random() * window.innerWidth,
-        y: window.innerHeight + 50
-      });
-    }, 8000 + delay * 1000);
-
-    return () => clearInterval(interval);
-  }, [delay]);
-
+const Particle = ({ delay = 0, x = 0, y = 0 }) => {
   return (
     <motion.div
       className="particle"
       style={{
-        left: position.x,
-        top: position.y,
+        left: x,
+        top: y,
         animationDelay: `${delay}s`
       }}
       animate={{
-        y: [-50, -window.innerHeight - 100],
+        y: [y, y - window.innerHeight - 100],
+        x: [x, x + (Math.random() - 0.5) * 100],
         rotate: [0, 360]
       }}
       transition={{
-        duration: 6 + delay,
+        duration: 8 + delay * 0.5,
         repeat: Infinity,
         ease: "linear"
       }}
@@ -271,7 +256,17 @@ const Typewriter = ({ text, speed = 100 }) => {
   }, [currentIndex, text, speed]);
 
   return (
-    <span className="typewriter">
+    <span 
+      className="typewriter"
+      style={{
+        wordBreak: 'break-word',
+        overflowWrap: 'break-word',
+        whiteSpace: 'pre-wrap',
+        display: 'inline-block',
+        width: '100%',
+        maxWidth: '100%'
+      }}
+    >
       {displayText}
       <span className="animate-pulse">|</span>
     </span>
@@ -287,6 +282,8 @@ const App = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [successTimeout, setSuccessTimeout] = useState(null);
   const [particles, setParticles] = useState([]);
   const [fireworks, setFireworks] = useState([]);
   const [sparkles, setSparkles] = useState([]);
@@ -301,17 +298,22 @@ const App = () => {
 
   // Initialize particles and decorations
   useEffect(() => {
-    // Create particles
-    const newParticles = Array.from({ length: 20 }, (_, i) => ({ id: i, delay: i * 0.5 }));
+    // Create particles with better distribution
+    const newParticles = Array.from({ length: 30 }, (_, i) => ({ 
+      id: i, 
+      delay: i * 0.3,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight
+    }));
     setParticles(newParticles);
 
-    // Create decorations
+    // Create decorations with better positioning
     const newDecorations = [];
-    for (let i = 0; i < 8; i++) {
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * (window.innerHeight * 0.6);
+    for (let i = 0; i < 12; i++) {
+      const x = Math.random() * (window.innerWidth - 50);
+      const y = Math.random() * (window.innerHeight * 0.7);
       const type = ['hat', 'balloon', 'gift'][Math.floor(Math.random() * 3)];
-      newDecorations.push({ id: i, x, y, type, delay: i * 0.5 });
+      newDecorations.push({ id: i, x, y, type, delay: i * 0.3 });
     }
     setDecorations(newDecorations);
 
@@ -336,6 +338,15 @@ const App = () => {
     }
   }, []);
 
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (successTimeout) {
+        clearTimeout(successTimeout);
+      }
+    };
+  }, [successTimeout]);
+
   // Audio handling
   const tryStartMusic = () => {
     if (audioRef.current) {
@@ -348,8 +359,8 @@ const App = () => {
           .then(() => {
             setIsMusicPlaying(true);
           })
-          .catch(() => {
-            // Music will start on user interaction
+          .catch((error) => {
+            console.log('Audio autoplay blocked:', error);
             setIsMusicPlaying(false);
           });
       }
@@ -362,9 +373,20 @@ const App = () => {
         audioRef.current.pause();
         setIsMusicPlaying(false);
       } else {
-        audioRef.current.play();
-        setIsMusicPlaying(true);
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsMusicPlaying(true);
+            })
+            .catch((error) => {
+              console.error('Failed to play audio:', error);
+              alert('Unable to play music. Please check your browser settings or try clicking elsewhere first.');
+            });
+        }
       }
+    } else {
+      alert('Audio file not found. Please add new-year-music.mp3 to the public/music/ folder.');
     }
   };
 
@@ -454,14 +476,44 @@ const App = () => {
     tryStartMusic();
   };
 
+  // Show success message with auto-close
+  const showSuccessMessage = (message) => {
+    // Clear any existing timeout
+    if (successTimeout) {
+      clearTimeout(successTimeout);
+    }
+    
+    setSuccessMessage(message);
+    setShowSuccess(true);
+    
+    // Set new timeout for auto-close
+    const timeout = setTimeout(() => {
+      setShowSuccess(false);
+      setSuccessMessage('');
+      setSuccessTimeout(null);
+    }, 3000);
+    
+    setSuccessTimeout(timeout);
+  };
+
+  // Manual close success message
+  const closeSuccessMessage = () => {
+    if (successTimeout) {
+      clearTimeout(successTimeout);
+      setSuccessTimeout(null);
+    }
+    setShowSuccess(false);
+    setSuccessMessage('');
+  };
+
   // Copy link
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(generatedLink);
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2000);
+      showSuccessMessage(t.copied);
     } catch (err) {
       console.error('Failed to copy: ', err);
+      showSuccessMessage('Failed to copy link');
     }
   };
 
@@ -474,11 +526,13 @@ const App = () => {
           text: t.greeting.replace('{name}', name),
           url: generatedLink
         });
+        showSuccessMessage(t.shared);
       } else {
         await copyLink();
       }
     } catch (err) {
       console.error('Failed to share: ', err);
+      showSuccessMessage('Failed to share');
     }
   };
 
@@ -487,7 +541,7 @@ const App = () => {
     setName('');
     setGeneratedLink('');
     setShowMessage(false);
-    setShowSuccess(false);
+    closeSuccessMessage();
     setSelectedLanguage('en');
   };
 
@@ -515,7 +569,7 @@ const App = () => {
 
       {/* Particles */}
       {particles.map(particle => (
-        <Particle key={particle.id} delay={particle.delay} />
+        <Particle key={particle.id} delay={particle.delay} x={particle.x} y={particle.y} />
       ))}
 
       {/* Fireworks */}
@@ -598,7 +652,13 @@ const App = () => {
       {/* Main Content */}
       <div className="flex items-center justify-center min-h-screen p-4">
         <motion.div
-          className="glass-card max-w-md w-full p-8 rounded-3xl"
+          className="glass-card max-w-lg w-full p-6 md:p-8 rounded-3xl"
+          style={{ 
+            maxWidth: '500px',
+            width: '100%', 
+            boxSizing: 'border-box',
+            overflow: 'hidden'
+          }}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -607,7 +667,7 @@ const App = () => {
             // Input Form
             <div className="text-center">
               <motion.h1
-                className="text-4xl md:text-5xl font-bold mb-8 high-contrast-text"
+                className="text-3xl md:text-3xl font-bold mb-8 high-contrast-text"
                 style={{ fontFamily: 'Great Vibes, cursive' }}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -661,7 +721,7 @@ const App = () => {
               transition={{ duration: 0.8 }}
             >
               <motion.h2
-                className="text-3xl md:text-4xl font-bold mb-6 high-contrast-text"
+                className="text-2xl md:text-3xl font-bold mb-6 high-contrast-text"
                 style={{ fontFamily: 'Great Vibes, cursive' }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -671,10 +731,15 @@ const App = () => {
               </motion.h2>
 
               <motion.div
-                className="text-xl md:text-2xl leading-relaxed high-contrast-text"
+                className="text-lg md:text-xl leading-relaxed high-contrast-text text-wrap"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
+                style={{ 
+                  maxWidth: '100%',
+                  width: '100%',
+                  padding: '0 10px'
+                }}
               >
                 <Typewriter
                   text={t.greeting.replace('{name}', name)}
@@ -734,19 +799,26 @@ const App = () => {
           <AnimatePresence>
             {showSuccess && (
               <motion.div
-                className="fixed inset-0 flex items-center justify-center z-50"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                className="fixed top-4 right-4 z-50 pointer-events-auto"
+                initial={{ opacity: 0, x: 100, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 100, scale: 0.8 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <motion.div
-                  className="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 max-w-sm"
+                  whileHover={{ scale: 1.02 }}
                 >
-                  {t.success}
+                  <span className="flex-1 text-sm font-medium">
+                    {successMessage || t.success}
+                  </span>
+                  <button
+                    onClick={closeSuccessMessage}
+                    className="text-white hover:text-gray-200 transition-colors text-lg font-bold leading-none"
+                    aria-label="Close notification"
+                  >
+                    ×
+                  </button>
                 </motion.div>
               </motion.div>
             )}
@@ -791,7 +863,7 @@ const App = () => {
                         {code === 'gu' && '🇬🇺 Gujarati'}
                       </span>
                       <span className="text-sm opacity-70">
-                        {translation.greeting.split('{name}')[0]}
+                        {/* {translation.greeting.split('{name}')[0]} */}
                       </span>
                     </div>
                   </motion.button>
