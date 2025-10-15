@@ -1,0 +1,524 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS Variables */
+:root {
+  --primary-gold: #FFD700;
+  --secondary-gold: #FFA500;
+  --accent-red: #FF6B6B;
+  --accent-blue: #4ECDC4;
+  --accent-purple: #9B59B6;
+  --accent-green: #2ECC71;
+  --text-white: #FFFFFF;
+  --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+/* Gradient Animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Particle System */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--primary-gold);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.particle:nth-child(odd) {
+  background: var(--accent-red);
+  animation-duration: 8s;
+}
+
+.particle:nth-child(3n) {
+  background: var(--accent-blue);
+  animation-duration: 10s;
+}
+
+.particle:nth-child(4n) {
+  background: var(--accent-purple);
+  animation-duration: 7s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-20vh) rotate(180deg);
+  }
+}
+
+/* Firework Effects */
+.firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: firework 1s ease-out forwards;
+}
+
+@keyframes firework {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Sparkle Effects */
+.sparkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--primary-gold);
+  border-radius: 50%;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Glowing Elements */
+.glow {
+  box-shadow: 0 0 20px var(--primary-gold), 0 0 40px var(--primary-gold), 0 0 60px var(--primary-gold);
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from {
+    box-shadow: 0 0 20px var(--primary-gold), 0 0 40px var(--primary-gold), 0 0 60px var(--primary-gold);
+  }
+  to {
+    box-shadow: 0 0 30px var(--primary-gold), 0 0 60px var(--primary-gold), 0 0 90px var(--primary-gold);
+  }
+}
+
+/* Typewriter Animation */
+.typewriter {
+  overflow: hidden;
+  border-right: 3px solid var(--primary-gold);
+  white-space: nowrap;
+  animation: typewriter 3s steps(40, end), blink 0.75s step-end infinite;
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--primary-gold); }
+}
+
+/* Message Float Animation */
+.message-float {
+  animation: messageFloat 3s ease-in-out infinite;
+}
+
+@keyframes messageFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Flower Rain Animation */
+.flower {
+  position: absolute;
+  font-size: 20px;
+  animation: flowerFall 8s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes flowerFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Confetti Animation */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  animation: confettiFall 3s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Traditional New Year Elements */
+.party-hat {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(45deg, var(--accent-red), var(--accent-blue));
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  animation: hatSway 4s ease-in-out infinite;
+}
+
+@keyframes hatSway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.balloon {
+  position: absolute;
+  width: 30px;
+  height: 40px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: balloonFloat 6s ease-in-out infinite;
+}
+
+@keyframes balloonFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+}
+
+.gift-box {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  background: linear-gradient(45deg, var(--accent-red), var(--accent-green));
+  border-radius: 5px;
+  animation: giftBounce 3s ease-in-out infinite;
+}
+
+@keyframes giftBounce {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.1);
+  }
+}
+
+/* Champagne Glass */
+.champagne {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  border: 2px solid var(--primary-gold);
+  border-radius: 0 0 10px 10px;
+  animation: champagneGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes champagneGlow {
+  from {
+    box-shadow: 0 0 10px var(--primary-gold);
+  }
+  to {
+    box-shadow: 0 0 20px var(--primary-gold), 0 0 30px var(--primary-gold);
+  }
+}
+
+/* Clock Element */
+.clock {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--primary-gold);
+  border-radius: 50%;
+  animation: clockTick 2s ease-in-out infinite;
+}
+
+@keyframes clockTick {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(5deg); }
+}
+
+/* Firework Burst */
+.firework-burst {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: fireworkBurst 1.5s ease-out forwards;
+}
+
+@keyframes fireworkBurst {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Loading Animation */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid var(--primary-gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Celebration Button */
+.celebration-btn {
+  background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+  color: #000;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.celebration-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+}
+
+.celebration-btn:active {
+  transform: translateY(0);
+}
+
+/* Audio Controls */
+.audio-control {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  color: var(--primary-gold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.audio-control:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .glass-card {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  .particle {
+    width: 3px;
+    height: 3px;
+  }
+  
+  .flower {
+    font-size: 16px;
+  }
+  
+  .party-hat, .balloon, .gift-box {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* High Contrast Text */
+.high-contrast-text {
+  color: var(--text-white);
+  text-shadow: var(--text-shadow);
+  font-weight: 600;
+}
+
+/* Message Container */
+.message-container {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--primary-gold);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.message-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--primary-gold), var(--accent-red), var(--accent-blue), var(--accent-purple));
+  border-radius: 20px;
+  z-index: -1;
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-white);
+  text-shadow: var(--text-shadow);
+  font-size: 14px;
+  z-index: 100;
+}
+
+/* Language Selector */
+.language-selector {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  color: var(--text-white);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.language-selector:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+/* Success Animation */
+.success-checkmark {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
