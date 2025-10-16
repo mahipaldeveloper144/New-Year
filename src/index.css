@@ -389,6 +389,23 @@ body {
   transform: scale(1.1);
 }
 
+.audio-control-pulse {
+  animation: audioControlPulse 1.5s ease-in-out infinite;
+  background: rgba(255, 215, 0, 0.8) !important;
+  color: #000 !important;
+}
+
+@keyframes audioControlPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .glass-card {
@@ -609,5 +626,72 @@ body {
   to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+/* Music Prompt */
+.music-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.music-prompt-content {
+  background: rgba(255, 215, 0, 0.9);
+  color: #000;
+  padding: 15px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  animation: musicPromptPulse 2s ease-in-out infinite;
+}
+
+.start-music-btn {
+  background: #000;
+  color: #FFD700;
+  border: 2px solid #FFD700;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.start-music-btn:hover {
+  background: #FFD700;
+  color: #000;
+  transform: scale(1.05);
+}
+
+@keyframes musicPromptPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  }
+}
+
+/* Mobile Music Prompt */
+@media (max-width: 768px) {
+  .music-prompt {
+    bottom: 15px;
+    left: 50%;
+    right: 15px;
+    transform: translateX(-50%);
+    max-width: 90%;
+  }
+  
+  .music-prompt-content {
+    padding: 10px 16px;
+    font-size: 14px;
   }
 }

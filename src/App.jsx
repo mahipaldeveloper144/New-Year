@@ -317,11 +317,23 @@ const App = () => {
     }
     setDecorations(newDecorations);
 
-    // Try to start music
-    setTimeout(() => {
-      setShowMusicToggle(true);
-      tryStartMusic();
-    }, 1000);
+    // Start music immediately when page loads
+    setShowMusicToggle(true);
+    tryStartMusic();
+
+    // Add multiple event listeners for user interaction
+    document.addEventListener('click', startMusicOnInteraction);
+    document.addEventListener('touchstart', startMusicOnInteraction);
+    document.addEventListener('keydown', startMusicOnInteraction);
+    document.addEventListener('mousemove', startMusicOnInteraction);
+
+    // Cleanup function
+    return () => {
+      document.removeEventListener('click', startMusicOnInteraction);
+      document.removeEventListener('touchstart', startMusicOnInteraction);
+      document.removeEventListener('keydown', startMusicOnInteraction);
+      document.removeEventListener('mousemove', startMusicOnInteraction);
+    };
   }, []);
 
   // Check URL parameters on load
@@ -338,6 +350,17 @@ const App = () => {
     }
   }, []);
 
+  // Ensure music starts when component is ready
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (audioRef.current && !isMusicPlaying) {
+        tryStartMusic();
+      }
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [isMusicPlaying]);
+
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
@@ -350,18 +373,53 @@ const App = () => {
   // Audio handling
   const tryStartMusic = () => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.3;
+      audioRef.current.volume = 0.4;
       audioRef.current.loop = true;
+      audioRef.current.muted = false;
       
+      // Try to play immediately
       const playPromise = audioRef.current.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
             setIsMusicPlaying(true);
+            console.log('🎵 Music started successfully');
           })
           .catch((error) => {
-            console.log('Audio autoplay blocked:', error);
+            console.log('🚫 Audio autoplay blocked, will retry on user interaction:', error);
             setIsMusicPlaying(false);
+          });
+      }
+    }
+  };
+
+  // Direct music start function for user interaction
+  const startMusicOnInteraction = (event) => {
+    // Prevent event bubbling to avoid multiple triggers
+    event.stopPropagation();
+    
+    if (audioRef.current && !isMusicPlaying) {
+      console.log('🎵 Attempting to start music on user interaction...');
+      
+      // Ensure audio is ready
+      audioRef.current.volume = 0.4;
+      audioRef.current.loop = true;
+      audioRef.current.muted = false;
+      
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsMusicPlaying(true);
+            console.log('🎵 Music started successfully!');
+            // Remove all listeners after successful start
+            document.removeEventListener('click', startMusicOnInteraction);
+            document.removeEventListener('touchstart', startMusicOnInteraction);
+            document.removeEventListener('keydown', startMusicOnInteraction);
+          })
+          .catch(err => {
+            console.log('🚫 Music start failed:', err);
           });
       }
     }
@@ -546,18 +604,19 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden" onClick={(e) => startMusicOnInteraction(e)}>
       {/* Background Music */}
       <audio
         ref={audioRef}
-        src="/music/new-year-music.mp3"
+        src="/music/Happy Diwali Festive Background Music  Diwali 2020  Diwali Special  Indian Instrumental Music.mp3"
         preload="auto"
+        loop
       />
 
       {/* Audio Control */}
       {showMusicToggle && (
         <motion.button
-          className="audio-control"
+          className={`audio-control ${!isMusicPlaying ? 'audio-control-pulse' : ''}`}
           onClick={toggleMusic}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -565,6 +624,26 @@ const App = () => {
         >
           {isMusicPlaying ? t.musicToggle : t.musicOff}
         </motion.button>
+      )}
+
+      {/* Music Start Prompt */}
+      {!isMusicPlaying && (
+        <motion.div
+          className="music-prompt"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2 }}
+        >
+          <div className="music-prompt-content">
+            <p>🎵 Click anywhere to start the music!</p>
+            <button 
+              className="start-music-btn"
+              onClick={(e) => startMusicOnInteraction(e)}
+            >
+              🎵 Start Music
+            </button>
+          </div>
+        </motion.div>
       )}
 
       {/* Particles */}
