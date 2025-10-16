@@ -721,7 +721,7 @@ const App = () => {
               transition={{ duration: 0.8 }}
             >
               <motion.h2
-                className="text-2xl md:text-3xl font-bold mb-6 high-contrast-text"
+                className="text-3xl md:text-3xl font-bold mb-6 high-contrast-text"
                 style={{ fontFamily: 'Great Vibes, cursive' }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
